@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zen_tasker/app/view/onboarding/onboarding_page.dart';
 import 'package:zen_tasker/app/view/components/title.dart';
 import 'package:zen_tasker/app/view/task_list/task_list_page.dart';
+import 'package:zen_tasker/utils/colors.dart';
 
 //splash screen
 class SplashPage extends StatefulWidget {
@@ -23,25 +24,31 @@ class _SplashPageState extends State<SplashPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            flex: 3,
-            child: Container(
-              alignment: Alignment.bottomCenter,
-              child: const TitleH1('Zen Tasker'),
+      body: LayoutBuilder(
+        builder: (context, constraints) => Column(
+          children: <Widget>[
+            Container(
+              height: constraints.maxHeight * 0.10,
+              color: customPrimaryColor,
             ),
-          ),
-          Expanded(
-            flex: 5,
-            child: Container(
-              alignment: Alignment.topCenter,
-              child: Center(
-                child: Lottie.asset('assets/lottie/intro.json'),
+            Expanded(
+              flex: 3,
+              child: Container(
+                alignment: Alignment.bottomCenter,
+                child: const TitleH1('Zen Tasker'),
               ),
             ),
-          ),
-        ],
+            Expanded(
+              flex: 5,
+              child: Container(
+                alignment: Alignment.topCenter,
+                child: Center(
+                  child: Lottie.asset('assets/lottie/intro.json'),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
