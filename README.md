@@ -1,16 +1,36 @@
-# lista_tareas
+# Lista de Tareas
 
-A new Flutter project.
+Este es un proyecto de Flutter que implementa una aplicación de lista de tareas. Los usuarios pueden agregar, eliminar y reordenar tareas, y el estado de las tareas se guarda entre sesiones.
 
-## Getting Started
+## Características
 
-This project is a starting point for a Flutter application.
+- Agregar nuevas tareas
+- Marcar tareas como completadas
+- Eliminar tareas
+- Reordenar tareas
+- Persistencia de datos entre sesiones
 
-A few resources to get you started if this is your first Flutter project:
+## Tecnologías utilizadas
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- Flutter
+- Provider para el manejo del estado
+- SharedPreferences para la persistencia de datos
+- introduction_screen para las pantallas de onboarding de primer uso
+- intl para la internacionalización
+- lottie para las animaciones
+- datetime_picker_formfield para seleccionar fechas y horas
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Cómo ejecutar el proyecto
+
+1. Asegúrate de tener Flutter y Dart configurados en tu máquina.
+2. Clona este repositorio.
+3. En la raíz del proyecto, ejecuta `flutter pub get` para obtener las dependencias.
+4. Ejecuta `flutter run` para iniciar la aplicación en un emulador o dispositivo conectado.
+
+## Contribuciones
+
+Las contribuciones son bienvenidas. Por favor, abre un issue o realiza un pull request si tienes algo que agregar.
+
+## Licencia
+
+Este proyecto está licenciado bajo los términos de la licencia MIT.
