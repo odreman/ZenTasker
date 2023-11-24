@@ -18,6 +18,7 @@ class TaskModel extends ChangeNotifier {
     }
     final Task task = tasks.removeAt(oldIndex);
     tasks.insert(newIndex, task);
+    _saveTasks();
     notifyListeners();
   }
 
