@@ -10,6 +10,19 @@ class NewTaskModal extends StatelessWidget {
 
   final _controller = TextEditingController();
 
+  void _saveTask(BuildContext context) {
+    if (_controller.text.isNotEmpty) {
+      var taskModel = Provider.of<TaskModel>(context, listen: false);
+      var newTask = Task(
+        DateTime.now().toString(), // Usamos el tiempo actual como ID único
+        _controller.text,
+        isDone: false, // La tarea nueva no está hecha
+      );
+      taskModel.addTask(newTask);
+      Navigator.pop(context);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -41,6 +54,7 @@ class NewTaskModal extends StatelessWidget {
                   borderRadius: BorderRadius.circular(16),
                 ),
               ),
+              onSubmitted: (_) => _saveTask(context),
             ),
             //Columna 3 Boton guardar
             const SizedBox(height: 26),
