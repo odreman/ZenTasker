@@ -1,18 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:zen_tasker/app/model/task_model.dart';
+import 'package:zen_tasker/app/view/components/title.dart';
 import 'package:zen_tasker/app/view/task_list/new_task_modal.dart';
-import 'package:zen_tasker/app/view/task_list/task_list.dart';
-import 'package:zen_tasker/constants/Colors.dart';
+import 'package:zen_tasker/app/view/task_list/task_item.dart';
+import 'package:zen_tasker/utils/colors.dart';
 
-class TaskListPage extends StatelessWidget {
+class TaskListPage extends StatefulWidget {
   const TaskListPage({Key? key}) : super(key: key);
+
+  @override
+  _TaskListPageState createState() => _TaskListPageState();
+}
+
+class _TaskListPageState extends State<TaskListPage> {
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () async {
+      await Provider.of<TaskModel>(context, listen: false).loadTasks();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Lista de tareas'),
+        title: const Text(
+          'Lista de tareas',
+          style: TextStyle(color: customSecundaryTextColor),
+        ),
         backgroundColor: customPrimaryColor,
       ),
       body: _buildBody(context),
@@ -27,17 +44,26 @@ class TaskListPage extends StatelessWidget {
           return const Center(child: CircularProgressIndicator());
         } else if (taskModel.error != null) {
           return _buildError(taskModel.error!);
+        } else if (taskModel.tasks.isEmpty) {
+          return _buildEmptyTaskListMessage();
         } else {
-          return _buildTaskList();
+          return _buildTaskList(taskModel);
         }
       },
+    );
+  }
+
+  Widget _buildEmptyTaskListMessage() {
+    return const Center(
+      child: TextH2(
+        'No tienes tareas registradas',
+      ),
     );
   }
 
   Widget _buildError(Object error) {
     String errorMessage;
     if (error is Exception) {
-      // Aquí puedes manejar diferentes tipos de excepciones y proporcionar mensajes de error más amigables
       errorMessage = 'Ha ocurrido un error: ${error.toString()}';
     } else {
       errorMessage = 'Ha ocurrido un error desconocido';
@@ -49,31 +75,48 @@ class TaskListPage extends StatelessWidget {
         child: Text(
           errorMessage,
           textAlign: TextAlign.center,
-          style: TextStyle(color: Colors.red),
+          style: const TextStyle(color: Colors.red),
         ),
       ),
     );
   }
 
-  Widget _buildTaskList() {
-    return TaskList();
+  Widget _buildTaskList(TaskModel taskModel) {
+    return ReorderableListView(
+      onReorder: (oldIndex, newIndex) {
+        taskModel.reorderTasks(oldIndex, newIndex);
+      },
+      children: taskModel.tasks.map((task) {
+        return TaskItem(
+          key: Key(task.id.toString()),
+          task,
+          onTap: () => taskModel.toggleDone(task),
+          onDelete: () => taskModel.deleteTask(task),
+          onTaskUpdated: taskModel.updateTask,
+        );
+      }).toList(),
+    );
   }
 
   FloatingActionButton _buildFloatingActionButton(BuildContext context) {
     return FloatingActionButton(
       onPressed: () => _showNewTaskModal(context),
-      child: const Icon(Icons.add),
+      child: const Icon(Icons.add, color: customSecundaryTextColor),
       backgroundColor: customPrimaryColor,
-      shape: const CircleBorder(
-        side: BorderSide(color: Colors.white, width: 4),
-      ),
     );
   }
 
   void _showNewTaskModal(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      builder: (context) => NewTaskModal(),
+      isScrollControlled: true,
+      builder: (context) => SingleChildScrollView(
+        child: Container(
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          child: NewTaskModal(),
+        ),
+      ),
     );
   }
 }

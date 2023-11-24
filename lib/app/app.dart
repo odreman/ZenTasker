@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:zen_tasker/app/view/splash/splash_page.dart';
-import 'package:zen_tasker/constants/colors.dart';
+import 'package:zen_tasker/utils/colors.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: customPrimaryColor),
         scaffoldBackgroundColor: customPrimaryBackgroundColor,
-        textTheme: TextTheme(
+        textTheme: const TextTheme(
           bodyLarge: TextStyle(
             fontFamily: 'Epilogue',
             color: customPrimaryTextColor,
@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
             minimumSize:
                 MaterialStateProperty.all(const Size(double.infinity, 54)),
             textStyle: MaterialStateProperty.all(
-              TextStyle(
+              const TextStyle(
                 fontFamily: 'Epilogue',
                 fontSize: 18,
                 fontWeight: FontWeight.w700,

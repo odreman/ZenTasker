@@ -1,0 +1,30 @@
+.
+├── app
+│   ├── app.dart
+│   ├── model
+│   │   ├── task.dart
+│   │   └── task_model.dart
+│   ├── repository
+│   │   └── task_repository.dart
+│   └── view
+│       ├── components
+│       │   ├── shape.dart
+│       │   └── title.dart
+│       ├── home
+│       │   └── home_page.dart
+│       ├── onboarding
+│       │   └── onboarding_page.dart
+│       ├── splash
+│       │   └── splash_page.dart
+│       └── task_list
+│           ├── new_task_modal.dart
+│           ├── task_details_modal.dart
+│           ├── task_item.dart
+│           ├── task_list.dart
+│           └── task_list_page.dart
+├── estructura.txt
+├── main.dart
+└── utils
+    └── colors.dart
+
+11 directories, 17 files

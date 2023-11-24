@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:zen_tasker/app/view/components/title.dart';
 import 'package:zen_tasker/app/view/task_list/task_list_page.dart';
-import 'package:zen_tasker/constants/colors.dart';
+import 'package:zen_tasker/utils/colors.dart';
 
 class OnboardingPage extends StatefulWidget {
   const OnboardingPage({Key? key}) : super(key: key);
@@ -17,19 +17,18 @@ class _OnboardingPageState extends State<OnboardingPage> {
 
   @override
   Widget build(BuildContext context) {
-    final primaryColor = Color(0xFF171a1f);
+    const primaryColor = Color(0xFF171a1f);
 
     return IntroductionScreen(
       pages: [
         PageViewModel(
             title: "",
-            bodyWidget: Column(
+            bodyWidget: const Column(
               children: [
                 SizedBox(height: 40),
                 TitleH1("Bienvenido a ZenTasker"),
                 SizedBox(height: 10),
-                const Image(
-                    image: AssetImage('assets/images/onboarding_001.png')),
+                Image(image: AssetImage('assets/images/onboarding_001.png')),
                 SizedBox(height: 30),
                 TextH2(
                     "Descubre la tranquilidad en la gestión de tareas. ZenTasker te ofrece una experiencia serena y organizada para manejar tu día a día.",
@@ -38,13 +37,12 @@ class _OnboardingPageState extends State<OnboardingPage> {
             )),
         PageViewModel(
             title: "",
-            bodyWidget: Column(
+            bodyWidget: const Column(
               children: [
                 SizedBox(height: 40),
                 TitleH1("Organiza con facilidad"),
                 SizedBox(height: 10),
-                const Image(
-                    image: AssetImage('assets/images/onboarding_003.png')),
+                Image(image: AssetImage('assets/images/onboarding_003.png')),
                 SizedBox(height: 30),
                 TextH2(
                     "Organizar tus tareas es sencillo y relajante. Prioriza, planifica y progresa.",
@@ -53,13 +51,12 @@ class _OnboardingPageState extends State<OnboardingPage> {
             )),
         PageViewModel(
             title: "",
-            bodyWidget: Column(
+            bodyWidget: const Column(
               children: [
                 SizedBox(height: 40),
                 TitleH1("Productividad serena"),
                 SizedBox(height: 10),
-                const Image(
-                    image: AssetImage('assets/images/onboarding_004.png')),
+                Image(image: AssetImage('assets/images/onboarding_004.png')),
                 SizedBox(height: 30),
                 TextH2(
                     "Alcanza tus objetivos manteniendo la calma. ZenTasker te ayuda a centrarte en lo que importante para tí.",
@@ -68,13 +65,12 @@ class _OnboardingPageState extends State<OnboardingPage> {
             )),
         PageViewModel(
             title: "",
-            bodyWidget: Column(
+            bodyWidget: const Column(
               children: [
                 SizedBox(height: 40),
                 TitleH1("Gestión efectiva del tiempo"),
                 SizedBox(height: 10),
-                const Image(
-                    image: AssetImage('assets/images/onboarding_002.png')),
+                Image(image: AssetImage('assets/images/onboarding_002.png')),
                 SizedBox(height: 30),
                 TextH2(
                     "Gestiona tu tiempo eficientemente. Encuentra el equilibrio perfecto entre trabajo, descanso y ocio a través de la gestión de tareas.",
@@ -85,7 +81,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
       onDone: () {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => TaskListPage()),
+          MaterialPageRoute(builder: (context) => const TaskListPage()),
         );
       },
       showSkipButton: true,

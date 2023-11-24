@@ -4,13 +4,14 @@ import 'package:intl/intl.dart';
 import 'package:zen_tasker/app/view/task_list/task_details_modal.dart';
 
 class TaskItem extends StatelessWidget {
-  TaskItem(this.task,
-      {super.key,
+  const TaskItem(this.task,
+      {Key? key,
       required this.onTap,
       required this.onDelete,
-      required this.onTaskUpdated});
+      required this.onTaskUpdated})
+      : super(key: key);
 
-  Task task;
+  final Task task;
   final VoidCallback? onTap;
   final VoidCallback? onDelete;
   final ValueChanged<Task> onTaskUpdated;
@@ -25,9 +26,9 @@ class TaskItem extends StatelessWidget {
       },
       background: Container(
         color: Colors.red,
-        child: Icon(Icons.delete, color: Colors.white),
+        child: const Icon(Icons.delete, color: Colors.white),
         alignment: Alignment.centerRight,
-        padding: EdgeInsets.only(right: 20.0),
+        padding: const EdgeInsets.only(right: 20.0),
       ),
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(21)),
@@ -42,9 +43,13 @@ class TaskItem extends StatelessWidget {
                     : const Icon(Icons.check_box_outline_blank),
               ),
               GestureDetector(
-                onTap: () => TaskDetailsModal(
-                  task: task,
-                ).showTaskDetailsModal(context),
+                onTap: () {
+                  showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    builder: (context) => TaskDetailsModal(task: task),
+                  );
+                },
                 child: Padding(
                   padding: const EdgeInsets.only(left: 10),
                   child: RichText(
@@ -56,7 +61,7 @@ class TaskItem extends StatelessWidget {
                           TextSpan(
                             text:
                                 '\n\nVence: ${DateFormat('dd/MM/yyyy HH:mm').format(task.dueDate!)}',
-                            style: TextStyle(fontSize: 10),
+                            style: const TextStyle(fontSize: 10),
                           ),
                       ],
                     ),

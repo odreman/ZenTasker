@@ -4,6 +4,8 @@ import 'package:zen_tasker/app/model/task_model.dart';
 import 'package:zen_tasker/app/view/task_list/task_item.dart';
 
 class TaskList extends StatelessWidget {
+  const TaskList({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Consumer<TaskModel>(
@@ -12,21 +14,24 @@ class TaskList extends StatelessWidget {
         width: double.infinity,
         child: Column(
           children: [
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
             //Columna 3 Lista de tareas
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: ListView.separated(
-                  itemBuilder: (_, index) => TaskItem(
-                    taskModel.tasks[index],
-                    onTap: () => taskModel.toggleDone(taskModel.tasks[index]),
-                    onDelete: () =>
-                        taskModel.deleteTask(taskModel.tasks[index]),
-                    onTaskUpdated: taskModel.updateTask,
-                  ),
-                  separatorBuilder: (_, __) => const SizedBox(height: 16),
-                  itemCount: taskModel.tasks.length,
+                child: ReorderableListView(
+                  onReorder: (oldIndex, newIndex) {
+                    taskModel.reorderTasks(oldIndex, newIndex);
+                  },
+                  children: taskModel.tasks.map((task) {
+                    return TaskItem(
+                      key: Key(task.id.toString()),
+                      task,
+                      onTap: () => taskModel.toggleDone(task),
+                      onDelete: () => taskModel.deleteTask(task),
+                      onTaskUpdated: taskModel.updateTask,
+                    );
+                  }).toList(),
                 ),
               ),
             ),

@@ -12,28 +12,41 @@ class TaskModel extends ChangeNotifier {
   bool get isLoading => _isLoading;
   Object? get error => _error;
 
-  void addTask(Task task) {
+  void reorderTasks(int oldIndex, int newIndex) {
+    if (oldIndex < newIndex) {
+      newIndex -= 1;
+    }
+    final Task task = tasks.removeAt(oldIndex);
+    tasks.insert(newIndex, task);
+    notifyListeners();
+  }
+
+  void addTask(Task task) async {
     _tasks.add(task);
+    await _saveTasks();
     notifyListeners();
   }
 
-  void deleteTask(Task task) {
+  void deleteTask(Task task) async {
     _tasks.remove(task);
+    await _saveTasks();
     notifyListeners();
   }
 
-  void updateTask(Task task) {
+  void updateTask(Task task) async {
     var index = _tasks.indexWhere((t) => t.id == task.id);
     if (index != -1) {
       _tasks[index] = task;
+      await _saveTasks();
       notifyListeners();
     }
   }
 
-  void toggleDone(Task task) {
+  void toggleDone(Task task) async {
     var index = _tasks.indexWhere((t) => t.id == task.id);
     if (index != -1) {
       _tasks[index].isDone = !_tasks[index].isDone;
+      await _saveTasks();
       notifyListeners();
     }
   }
@@ -53,5 +66,11 @@ class TaskModel extends ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     }
+  }
+
+  Future<void> _saveTasks() async {
+    final prefs = await SharedPreferences.getInstance();
+    final data = _tasks.map((task) => json.encode(task.toJson())).toList();
+    await prefs.setStringList('tasks', data);
   }
 }

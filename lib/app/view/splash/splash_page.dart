@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:zen_tasker/app/onboarding/onboarding_page.dart';
+import 'package:zen_tasker/app/view/onboarding/onboarding_page.dart';
 import 'package:zen_tasker/app/view/components/title.dart';
 import 'package:zen_tasker/app/view/task_list/task_list_page.dart';
 
@@ -50,15 +50,15 @@ class _SplashPageState extends State<SplashPage> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool _seen = (prefs.getBool('seen') ?? false);
 
-    await Future.delayed(Duration(seconds: 4), () {
+    await Future.delayed(const Duration(seconds: 4), () {
       if (_seen) {
         Navigator.of(context).pushReplacement(
-          new MaterialPageRoute(builder: (context) => new TaskListPage()),
+          MaterialPageRoute(builder: (context) => const TaskListPage()),
         );
       } else {
         prefs.setBool('seen', true);
         Navigator.of(context).pushReplacement(
-          new MaterialPageRoute(builder: (context) => new OnboardingPage()),
+          MaterialPageRoute(builder: (context) => const OnboardingPage()),
         );
       }
     });
