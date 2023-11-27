@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zen_tasker/app/view/onboarding/onboarding_page.dart';
 import 'package:zen_tasker/app/view/components/title.dart';
 import 'package:zen_tasker/app/view/task_list/task_list_page.dart';
-import 'package:zen_tasker/utils/colors.dart';
+import 'package:zen_tasker/utils/constants.dart';
 
 //splash screen
 class SplashPage extends StatefulWidget {

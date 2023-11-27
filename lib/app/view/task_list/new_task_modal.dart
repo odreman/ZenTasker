@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:zen_tasker/app/model/task.dart';
 import 'package:zen_tasker/app/model/task_model.dart';
 import 'package:zen_tasker/app/view/components/title.dart';
-import 'package:zen_tasker/utils/colors.dart';
+import 'package:zen_tasker/utils/constants.dart';
 
 class NewTaskModal extends StatelessWidget {
   NewTaskModal({Key? key}) : super(key: key);

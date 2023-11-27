@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// Colores
 const customPrimaryColor = Color(0xFF1d2128);
 const customSecundaryColor = Color(0xFFDEE1E6);
 const customTertiaryColor = Color(0xFF7F7F7F);
@@ -8,3 +9,11 @@ const customPrimaryTextColor = Color(0xFF171a1f);
 const customSecundaryTextColor = Color(0xFFffffff);
 const customPrimaryBackgroundColor = Color(0xFFf1f2f4);
 const customSecundaryBackgroundColor = Color(0xFFffffff);
+
+// Categorías predefinidas
+const predefinedCategories = <String>[
+  'Todos',
+  'Trabajo',
+  'Personal',
+  'Hogar',
+];

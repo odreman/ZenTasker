@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:zen_tasker/app/view/components/title.dart';
 import 'package:zen_tasker/app/view/task_list/task_details_modal.dart';
 import 'package:percent_indicator/percent_indicator.dart';
-import 'package:zen_tasker/utils/colors.dart';
+import 'package:zen_tasker/utils/constants.dart';
 
 class TaskItem extends StatelessWidget {
   const TaskItem(this.task,

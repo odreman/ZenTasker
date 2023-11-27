@@ -6,9 +6,10 @@ import 'package:zen_tasker/app/model/category.dart';
 import 'package:zen_tasker/app/model/task.dart';
 import 'package:zen_tasker/app/model/task_model.dart';
 import 'package:zen_tasker/app/view/components/title.dart';
+import 'package:zen_tasker/app/view/task_list/input_field.dart';
 import 'package:zen_tasker/app/view/task_list/new_task_modal.dart';
 import 'package:zen_tasker/app/view/task_list/task_item.dart';
-import 'package:zen_tasker/utils/colors.dart';
+import 'package:zen_tasker/utils/constants.dart';
 
 final List<String> predefinedCategories = Category.getPredefinedCategories()
     .map((category) => category.name)
@@ -65,32 +66,17 @@ class _TaskListPageState extends State<TaskListPage> {
             alignment: Alignment.bottomCenter,
             child: Container(
               color: customPrimaryBackgroundColor,
-              padding: EdgeInsets.all(8.0),
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: TextField(
-                      controller: _controller,
-                      decoration: InputDecoration(
-                        hintText: 'Nueva tarea',
-                      ),
-                    ),
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.send),
-                    onPressed: () {
-                      if (_controller.text.isNotEmpty) {
-                        var uuid = Uuid();
-                        final task = Task(uuid.v4(), _controller.text,
-                            category: selectedCategory);
-                        Provider.of<TaskModel>(context, listen: false)
-                            .addTask(task);
-                        _controller.clear();
-                        FocusScope.of(context).unfocus();
-                      }
-                    },
-                  ),
-                ],
+              padding: const EdgeInsets.all(8.0),
+              child: InputField(
+                controller: _controller,
+                onSubmitted: (text) {
+                  var uuid = const Uuid();
+                  final task = Task(uuid.v4(), text,
+                      category: selectedCategory == "Todos"
+                          ? "Ninguna categoría"
+                          : selectedCategory);
+                  Provider.of<TaskModel>(context, listen: false).addTask(task);
+                },
               ),
             ),
           ),
@@ -152,19 +138,20 @@ class _TaskListPageState extends State<TaskListPage> {
       children: [
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Container(
+          child: SizedBox(
             height: 50.0,
             child: ChipList(
-              listOfChipNames: ["Todos"] + predefinedCategories,
+              listOfChipNames: ["Todos"] +
+                  predefinedCategories
+                      .where((category) => category != "Todos")
+                      .toList(),
               activeBgColorList: const [customTertiaryColor],
               inactiveBgColorList: const [customSecundaryBackgroundColor],
               activeTextColorList: const [Colors.white],
               inactiveTextColorList: const [Colors.black],
-              listOfChipIndicesCurrentlySeclected: [
-                selectedCategory == "Todos"
-                    ? 0
-                    : predefinedCategories.indexOf(selectedCategory) + 1
-              ],
+              listOfChipIndicesCurrentlySeclected: (selectedCategory == "Todos")
+                  ? [0]
+                  : [1 + predefinedCategories.indexOf(selectedCategory)],
               extraOnToggle: (index) {
                 setState(() {
                   selectedCategory =
@@ -192,14 +179,6 @@ class _TaskListPageState extends State<TaskListPage> {
           ),
         ),
       ],
-    );
-  }
-
-  FloatingActionButton _buildFloatingActionButton(BuildContext context) {
-    return FloatingActionButton(
-      onPressed: () => _showNewTaskModal(context),
-      child: const Icon(Icons.add, color: customSecundaryTextColor),
-      backgroundColor: customPrimaryColor,
     );
   }
 

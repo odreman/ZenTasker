@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:zen_tasker/app/view/splash/splash_page.dart';
-import 'package:zen_tasker/utils/colors.dart';
+import 'package:zen_tasker/utils/constants.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
