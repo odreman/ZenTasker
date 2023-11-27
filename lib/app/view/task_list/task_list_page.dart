@@ -1,10 +1,19 @@
+import 'package:chip_list/chip_list.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:zen_tasker/app/model/category.dart';
+import 'package:zen_tasker/app/model/task.dart';
 import 'package:zen_tasker/app/model/task_model.dart';
 import 'package:zen_tasker/app/view/components/title.dart';
 import 'package:zen_tasker/app/view/task_list/new_task_modal.dart';
+import 'package:zen_tasker/app/view/task_list/task_details_modal.dart';
 import 'package:zen_tasker/app/view/task_list/task_item.dart';
+import 'package:zen_tasker/app/view/task_list/task_list.dart';
 import 'package:zen_tasker/utils/colors.dart';
+
+final List<String> predefinedCategories = Category.getPredefinedCategories()
+    .map((category) => category.name)
+    .toList();
 
 class TaskListPage extends StatefulWidget {
   const TaskListPage({Key? key}) : super(key: key);
@@ -14,6 +23,8 @@ class TaskListPage extends StatefulWidget {
 }
 
 class _TaskListPageState extends State<TaskListPage> {
+  String selectedCategory = "Todos";
+
   @override
   void initState() {
     super.initState();
@@ -82,19 +93,54 @@ class _TaskListPageState extends State<TaskListPage> {
   }
 
   Widget _buildTaskList(TaskModel taskModel) {
-    return ReorderableListView(
-      onReorder: (oldIndex, newIndex) {
-        taskModel.reorderTasks(oldIndex, newIndex);
-      },
-      children: taskModel.tasks.map((task) {
-        return TaskItem(
-          key: Key(task.id.toString()),
-          task,
-          onTap: () => taskModel.toggleDone(task),
-          onDelete: () => taskModel.deleteTask(task),
-          onTaskUpdated: taskModel.updateTask,
-        );
-      }).toList(),
+    List<Task> filteredTasks = taskModel.tasks.where((task) {
+      return selectedCategory == "Todos" || task.category == selectedCategory;
+    }).toList();
+
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            height: 50.0,
+            child: ChipList(
+              listOfChipNames: ["Todos"] + predefinedCategories,
+              activeBgColorList: [customTertiaryColor],
+              inactiveBgColorList: [customSecundaryBackgroundColor],
+              activeTextColorList: [Colors.white],
+              inactiveTextColorList: [Colors.black],
+              listOfChipIndicesCurrentlySeclected: [
+                selectedCategory == "Todos"
+                    ? 0
+                    : predefinedCategories.indexOf(selectedCategory) + 1
+              ],
+              extraOnToggle: (index) {
+                setState(() {
+                  selectedCategory =
+                      (index == 0) ? "Todos" : predefinedCategories[index - 1];
+                });
+              },
+            ),
+          ),
+        ),
+        const SizedBox(height: 30),
+        Expanded(
+          child: ReorderableListView(
+            onReorder: (oldIndex, newIndex) {
+              taskModel.reorderTasks(oldIndex, newIndex);
+            },
+            children: filteredTasks.map((task) {
+              return TaskItem(
+                key: Key(task.id.toString()),
+                task,
+                onTap: () => taskModel.toggleDone(task),
+                onDelete: () => taskModel.deleteTask(task),
+                onTaskUpdated: taskModel.updateTask,
+              );
+            }).toList(),
+          ),
+        ),
+      ],
     );
   }
 

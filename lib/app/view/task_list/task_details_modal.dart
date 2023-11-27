@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:zen_tasker/app/model/category.dart';
 import 'package:zen_tasker/app/model/task.dart';
 import 'package:zen_tasker/app/model/task_model.dart';
 import 'package:zen_tasker/app/view/components/title.dart';
@@ -7,15 +8,32 @@ import 'package:zen_tasker/utils/colors.dart';
 import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 
-class TaskDetailsModal extends StatelessWidget {
+final List<String> predefinedCategories = Category.getPredefinedCategories()
+    .map((category) => category.name)
+    .toList();
+String? selectedCategory = predefinedCategories.first;
+
+class TaskDetailsModal extends StatefulWidget {
   final Task task;
 
   const TaskDetailsModal({Key? key, required this.task}) : super(key: key);
 
   @override
+  _TaskDetailsModalState createState() => _TaskDetailsModalState();
+}
+
+class _TaskDetailsModalState extends State<TaskDetailsModal> {
+  @override
+  void initState() {
+    super.initState();
+    //selectedCategory = predefinedCategories.first;
+    selectedCategory = widget.task.category ?? predefinedCategories.first;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final _detailsController = TextEditingController(text: task.detail);
-    DateTime? _dueDate = task.dueDate;
+    final _detailsController = TextEditingController(text: widget.task.detail);
+    DateTime? _dueDate = widget.task.dueDate;
 
     return Padding(
       padding:
@@ -34,6 +52,25 @@ class TaskDetailsModal extends StatelessWidget {
               const Align(
                 alignment: AlignmentDirectional.centerStart,
                 child: TitleH1("Detalles de la tarea"),
+              ),
+              const SizedBox(height: 26),
+              Align(
+                alignment: AlignmentDirectional.topStart,
+                child: DropdownButton<String>(
+                  value: selectedCategory,
+                  onChanged: (String? value) {
+                    setState(() {
+                      selectedCategory = value!;
+                    });
+                  },
+                  items: predefinedCategories
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                ),
               ),
               const SizedBox(height: 26),
               TextFormField(
@@ -61,9 +98,9 @@ class TaskDetailsModal extends StatelessWidget {
                 ),
                 onChanged: (date) {
                   _dueDate = date;
-                  task.dueDate = _dueDate;
+                  widget.task.dueDate = _dueDate;
                   Provider.of<TaskModel>(context, listen: false)
-                      .updateTask(task);
+                      .updateTask(widget.task);
                 },
                 onShowPicker: (context, currentValue) async {
                   final date = await showDatePicker(
@@ -86,10 +123,13 @@ class TaskDetailsModal extends StatelessWidget {
               const SizedBox(height: 26),
               ElevatedButton(
                 onPressed: () {
-                  task.detail = _detailsController.text;
-                  task.dueDate = _dueDate;
+                  Task updatedTask = widget.task.copyWith(
+                    detail: _detailsController.text,
+                    dueDate: _dueDate,
+                    category: selectedCategory,
+                  );
                   Provider.of<TaskModel>(context, listen: false)
-                      .updateTask(task);
+                      .updateTask(updatedTask);
                   Navigator.pop(context);
                 },
                 style: ElevatedButton.styleFrom(
