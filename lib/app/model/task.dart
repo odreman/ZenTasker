@@ -1,5 +1,3 @@
-import 'package:zen_tasker/app/model/category.dart';
-
 class Task {
   Task(this.id, this.title,
       {this.isDone = false,

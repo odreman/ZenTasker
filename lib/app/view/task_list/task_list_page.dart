@@ -1,6 +1,7 @@
 import 'package:chip_list/chip_list.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 import 'package:zen_tasker/app/model/category.dart';
 import 'package:zen_tasker/app/model/task.dart';
 import 'package:zen_tasker/app/model/task_model.dart';
@@ -22,6 +23,13 @@ class TaskListPage extends StatefulWidget {
 
 class _TaskListPageState extends State<TaskListPage> {
   String selectedCategory = "Todos";
+  final _controller = TextEditingController();
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -41,8 +49,53 @@ class _TaskListPageState extends State<TaskListPage> {
         ),
         backgroundColor: customPrimaryColor,
       ),
-      body: _buildBody(context),
-      floatingActionButton: _buildFloatingActionButton(context),
+      body: Stack(
+        children: [
+          _buildBody(context),
+          Positioned(
+            bottom: 80.0,
+            right: 20.0,
+            child: FloatingActionButton(
+              onPressed: () => _showNewTaskModal(context),
+              child: const Icon(Icons.add, color: customSecundaryTextColor),
+              backgroundColor: customPrimaryColor,
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              color: customPrimaryBackgroundColor,
+              padding: EdgeInsets.all(8.0),
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    child: TextField(
+                      controller: _controller,
+                      decoration: InputDecoration(
+                        hintText: 'Nueva tarea',
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.send),
+                    onPressed: () {
+                      if (_controller.text.isNotEmpty) {
+                        var uuid = Uuid();
+                        final task = Task(uuid.v4(), _controller.text,
+                            category: selectedCategory);
+                        Provider.of<TaskModel>(context, listen: false)
+                            .addTask(task);
+                        _controller.clear();
+                        FocusScope.of(context).unfocus();
+                      }
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
