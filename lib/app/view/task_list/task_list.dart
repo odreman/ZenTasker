@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:zen_tasker/app/model/category.dart';
 import 'package:zen_tasker/app/model/task.dart';
 import 'package:zen_tasker/app/model/task_model.dart';
-import 'package:zen_tasker/app/view/task_list/task_details_modal.dart';
 import 'package:zen_tasker/app/view/task_list/task_item.dart';
 import 'package:zen_tasker/utils/colors.dart';
 

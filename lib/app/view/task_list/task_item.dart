@@ -108,7 +108,7 @@ class TaskItem extends StatelessWidget {
                                             ),
                                           ),
                                           Text('${task.flagSel! - 5}',
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                   color: Colors.white,
                                                   fontSize: 10)),
                                         ],
@@ -205,7 +205,7 @@ class TaskItem extends StatelessWidget {
                                             ),
                                           ),
                                           Text('${index + 1}',
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                   color: Colors.white,
                                                   fontSize: 10)),
                                         ],

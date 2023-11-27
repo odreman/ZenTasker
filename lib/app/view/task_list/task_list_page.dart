@@ -6,9 +6,7 @@ import 'package:zen_tasker/app/model/task.dart';
 import 'package:zen_tasker/app/model/task_model.dart';
 import 'package:zen_tasker/app/view/components/title.dart';
 import 'package:zen_tasker/app/view/task_list/new_task_modal.dart';
-import 'package:zen_tasker/app/view/task_list/task_details_modal.dart';
 import 'package:zen_tasker/app/view/task_list/task_item.dart';
-import 'package:zen_tasker/app/view/task_list/task_list.dart';
 import 'package:zen_tasker/utils/colors.dart';
 
 final List<String> predefinedCategories = Category.getPredefinedCategories()
@@ -105,10 +103,10 @@ class _TaskListPageState extends State<TaskListPage> {
             height: 50.0,
             child: ChipList(
               listOfChipNames: ["Todos"] + predefinedCategories,
-              activeBgColorList: [customTertiaryColor],
-              inactiveBgColorList: [customSecundaryBackgroundColor],
-              activeTextColorList: [Colors.white],
-              inactiveTextColorList: [Colors.black],
+              activeBgColorList: const [customTertiaryColor],
+              inactiveBgColorList: const [customSecundaryBackgroundColor],
+              activeTextColorList: const [Colors.white],
+              inactiveTextColorList: const [Colors.black],
               listOfChipIndicesCurrentlySeclected: [
                 selectedCategory == "Todos"
                     ? 0
