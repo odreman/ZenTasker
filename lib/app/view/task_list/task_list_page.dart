@@ -174,7 +174,7 @@ class _TaskListPageState extends State<TaskListPage> {
             ),
           ),
         ),
-        const SizedBox(height: 30),
+        const SizedBox(height: 15),
         Expanded(
           child: ReorderableListView(
             onReorder: (oldIndex, newIndex) {
