@@ -6,8 +6,8 @@ import 'package:zen_tasker/app/model/category.dart';
 import 'package:zen_tasker/app/model/task.dart';
 import 'package:zen_tasker/app/model/task_model.dart';
 import 'package:zen_tasker/app/view/components/title.dart';
-import 'package:zen_tasker/app/view/task_list/input_field.dart';
-import 'package:zen_tasker/app/view/task_list/new_task_modal.dart';
+import 'package:zen_tasker/app/view/task_add_page/task_add_page.dart';
+import 'package:zen_tasker/app/view/task_list/task_list_newtask.dart';
 import 'package:zen_tasker/app/view/task_list/task_item.dart';
 import 'package:zen_tasker/utils/constants.dart';
 
@@ -57,7 +57,13 @@ class _TaskListPageState extends State<TaskListPage> {
             bottom: 80.0,
             right: 20.0,
             child: FloatingActionButton(
-              onPressed: () => _showNewTaskModal(context),
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AddTaskPage(),
+                  fullscreenDialog: true,
+                ),
+              ),
               child: const Icon(Icons.add, color: customSecundaryTextColor),
               backgroundColor: customPrimaryColor,
             ),
@@ -67,7 +73,7 @@ class _TaskListPageState extends State<TaskListPage> {
             child: Container(
               color: customPrimaryBackgroundColor,
               padding: const EdgeInsets.all(8.0),
-              child: InputField(
+              child: TaskListNewTask(
                 controller: _controller,
                 onSubmitted: (text) {
                   var uuid = const Uuid();
@@ -134,7 +140,7 @@ class _TaskListPageState extends State<TaskListPage> {
       return selectedCategory == "Todos" || task.category == selectedCategory;
     }).toList();
 
-    return Column(
+    return ListView(
       children: [
         Padding(
           padding: const EdgeInsets.all(8.0),
@@ -162,37 +168,16 @@ class _TaskListPageState extends State<TaskListPage> {
           ),
         ),
         const SizedBox(height: 15),
-        Expanded(
-          child: ReorderableListView(
-            onReorder: (oldIndex, newIndex) {
-              taskModel.reorderTasks(oldIndex, newIndex);
-            },
-            children: filteredTasks.map((task) {
-              return TaskItem(
-                key: Key(task.id.toString()),
-                task,
-                onTap: () => taskModel.toggleDone(task),
-                onDelete: () => taskModel.deleteTask(task),
-                onTaskUpdated: taskModel.updateTask,
-              );
-            }).toList(),
-          ),
-        ),
+        ...filteredTasks.map((task) {
+          return TaskItem(
+            key: Key(task.id.toString()),
+            task,
+            onTap: () => taskModel.toggleDone(task),
+            onDelete: () => taskModel.deleteTask(task),
+            onTaskUpdated: taskModel.updateTask,
+          );
+        }).toList(),
       ],
-    );
-  }
-
-  void _showNewTaskModal(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      builder: (context) => SingleChildScrollView(
-        child: Container(
-          padding:
-              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-          child: NewTaskModal(),
-        ),
-      ),
     );
   }
 }

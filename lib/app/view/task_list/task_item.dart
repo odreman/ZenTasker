@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:zen_tasker/app/model/task.dart';
 import 'package:intl/intl.dart';
 import 'package:zen_tasker/app/view/components/title.dart';
-import 'package:zen_tasker/app/view/task_list/task_details_modal.dart';
+import 'package:zen_tasker/app/view/task_details/task_details_page.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:zen_tasker/utils/constants.dart';
 
@@ -35,10 +35,17 @@ class TaskItem extends StatelessWidget {
         ),
         child: GestureDetector(
           onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => TaskDetailsPage(task: task)));
+
+            /*
             showModalBottomSheet(
               context: context,
-              builder: (context) => TaskDetailsModal(task: task),
+              builder: (context) => TaskDetailsModal(task: task),          
             );
+            */
           },
           child: Card(
             shape:

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class InputField extends StatelessWidget {
+class TaskListNewTask extends StatelessWidget {
   final TextEditingController controller;
   final Function(String) onSubmitted;
 
-  const InputField(
+  const TaskListNewTask(
       {super.key, required this.controller, required this.onSubmitted});
 
   @override
