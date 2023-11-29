@@ -92,7 +92,7 @@ class _TaskDetailsModalState extends State<TaskDetailsModal> {
                 format: DateFormat("dd/MM/yyyy HH:mm"),
                 decoration: InputDecoration(
                   labelText: _dueDate != null
-                      ? 'Fecha seleccionada: ${DateFormat('dd/MM/yyyy HH:mm').format(_dueDate!)}'
+                      ? 'Fecha seleccionada: ${DateFormat('dd/MM/yyyy HH:mm').format(_dueDate)}'
                       : 'Vencimiento',
                   labelStyle: DefaultTextStyle.of(context).style,
                 ),

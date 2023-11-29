@@ -2,20 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:provider/provider.dart';
-import 'package:uuid/uuid.dart';
 import 'package:zen_tasker/app/model/category.dart';
 import 'package:zen_tasker/app/model/task.dart';
 import 'package:zen_tasker/app/model/task_model.dart';
-import 'package:zen_tasker/app/view/components/title.dart';
+import 'package:zen_tasker/services/notification_services.dart';
 import 'package:zen_tasker/utils/constants.dart';
 
 class AddTaskPage extends StatefulWidget {
+  const AddTaskPage({super.key});
+
   @override
   _AddTaskPageState createState() => _AddTaskPageState();
 }
 
 class _AddTaskPageState extends State<AddTaskPage> {
   DateTime? _dueDate;
+  DateTime? _reminderDate;
   String? selectedCategory;
   final List<String> predefinedCategories = Category.getPredefinedCategories()
       .map((category) => category.name)
@@ -139,19 +141,77 @@ class _AddTaskPageState extends State<AddTaskPage> {
                 ],
               ),
 
-              //Column 5 - Save button
+              //Column 5 - Reminder
+              const SizedBox(height: 20),
+              Row(
+                children: [
+                  const Icon(Icons.alarm),
+                  const SizedBox(width: 10), // Icono de alarma
+                  GestureDetector(
+                    onTap: () async {
+                      final date = await showDatePicker(
+                          context: context,
+                          firstDate: DateTime(DateTime.now().year - 1),
+                          initialDate: _reminderDate ?? DateTime.now(),
+                          lastDate: DateTime(DateTime.now().year + 3));
+                      if (date != null) {
+                        final time = await showTimePicker(
+                          context: context,
+                          initialTime: TimeOfDay.fromDateTime(
+                              _reminderDate ?? DateTime.now()),
+                        );
+                        setState(() {
+                          _reminderDate = DateTimeField.combine(date, time);
+                        });
+                      }
+                    },
+                    child: Chip(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      backgroundColor: customPrimaryBackgroundColor,
+                      label: Text(_reminderDate != null
+                          ? DateFormat('dd/MM/yyyy HH:mm')
+                              .format(_reminderDate!)
+                          : 'Recordatorio'),
+                      deleteIcon: _reminderDate != null
+                          ? const Icon(Icons.close, size: 18)
+                          : null,
+                      onDeleted: _reminderDate != null
+                          ? () {
+                              setState(() {
+                                _reminderDate = null;
+                              });
+                            }
+                          : null,
+                    ),
+                  ),
+                ],
+              ),
+
+              //Column 6 - Save button
               const SizedBox(height: 50),
               ElevatedButton(
                 onPressed: () {
                   final task = Task(
-                    Uuid().v4(),
+                    generateId(),
                     _titleController.text,
                     detail: _detailsController.text,
                     category: selectedCategory,
                     dueDate: _dueDate,
+                    reminderDate: _reminderDate,
                     isDone: false,
                   );
                   Provider.of<TaskModel>(context, listen: false).addTask(task);
+
+                  if (_reminderDate != null) {
+                    NotificationService().scheduleNotification(
+                        id: task.id,
+                        title: task.title,
+                        body: task.detail,
+                        scheduledNotificationDateTime: _reminderDate!);
+                  }
+
                   Navigator.pop(context);
                 },
                 style: ElevatedButton.styleFrom(
@@ -171,4 +231,8 @@ class _AddTaskPageState extends State<AddTaskPage> {
       ),
     );
   }
+}
+
+int generateId() {
+  return (DateTime.now().millisecondsSinceEpoch / 1000).round();
 }

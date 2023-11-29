@@ -6,6 +6,7 @@ import 'package:zen_tasker/app/model/category.dart';
 import 'package:zen_tasker/app/model/task.dart';
 import 'package:zen_tasker/app/model/task_model.dart';
 import 'package:zen_tasker/app/view/components/title.dart';
+import 'package:zen_tasker/services/notification_services.dart';
 import 'package:zen_tasker/utils/constants.dart';
 
 class TaskDetailsPage extends StatefulWidget {
@@ -19,6 +20,8 @@ class TaskDetailsPage extends StatefulWidget {
 
 class _TaskDetailsPageState extends State<TaskDetailsPage> {
   DateTime? _dueDate;
+  DateTime? _reminderDate;
+
   String? selectedCategory;
   final List<String> predefinedCategories = Category.getPredefinedCategories()
       .map((category) => category.name)
@@ -29,6 +32,7 @@ class _TaskDetailsPageState extends State<TaskDetailsPage> {
   void initState() {
     super.initState();
     _dueDate = widget.task.dueDate;
+    _reminderDate = widget.task.reminderDate;
     selectedCategory = widget.task.category ?? predefinedCategories.first;
     _detailsController = TextEditingController(text: widget.task.detail);
   }
@@ -143,7 +147,79 @@ class _TaskDetailsPageState extends State<TaskDetailsPage> {
                 ],
               ),
 
-              //Column 4 - Done
+              //Column 4 - Reminder
+              const SizedBox(height: 20),
+              Row(
+                children: [
+                  const Icon(Icons.alarm),
+                  const SizedBox(width: 10), // Icono de alarma
+                  GestureDetector(
+                    onTap: () async {
+                      final date = await showDatePicker(
+                          context: context,
+                          firstDate: DateTime(DateTime.now().year - 1),
+                          initialDate: _reminderDate ?? DateTime.now(),
+                          lastDate: DateTime(DateTime.now().year + 3));
+                      if (date != null) {
+                        final time = await showTimePicker(
+                          context: context,
+                          initialTime: TimeOfDay.fromDateTime(
+                              _reminderDate ?? DateTime.now()),
+                        );
+                        setState(() {
+                          _reminderDate = DateTimeField.combine(date, time);
+                          widget.task.reminderDate = _reminderDate;
+                          Provider.of<TaskModel>(context, listen: false)
+                              .updateTask(widget.task);
+
+                          //notificationService.scheduleNotification
+
+                          print(
+                              "-------------------------------NotificationService");
+                          print("reminder: &_reminderDate");
+
+                          NotificationService()
+                              .cancelNotification(widget.task.id);
+
+                          NotificationService().scheduleNotification(
+                              id: widget.task.id,
+                              title: widget.task.title,
+                              body: widget.task.detail,
+                              scheduledNotificationDateTime: _reminderDate!);
+                        });
+                      }
+                    },
+                    child: Align(
+                      alignment: AlignmentDirectional.topStart,
+                      child: Chip(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        backgroundColor: customPrimaryBackgroundColor,
+                        label: Text(_reminderDate != null
+                            ? DateFormat('dd/MM/yyyy HH:mm')
+                                .format(_reminderDate!)
+                            : 'Recordatorio'),
+                        deleteIcon: _reminderDate != null
+                            ? const Icon(Icons.close)
+                            : null,
+                        onDeleted: _reminderDate != null
+                            ? () {
+                                setState(() {
+                                  _reminderDate = null;
+                                  widget.task.reminderDate = _reminderDate;
+                                  Provider.of<TaskModel>(context, listen: false)
+                                      .updateTask(widget.task);
+                                });
+                              }
+                            : null,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+
+              //Column 5 - Done
               const SizedBox(height: 20),
               Align(
                 alignment: AlignmentDirectional.topStart,

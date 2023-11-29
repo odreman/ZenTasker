@@ -10,6 +10,7 @@ import 'package:zen_tasker/app/view/task_add_page/task_add_page.dart';
 import 'package:zen_tasker/app/view/task_list/task_list_newtask.dart';
 import 'package:zen_tasker/app/view/task_list/task_item.dart';
 import 'package:zen_tasker/utils/constants.dart';
+import 'package:zen_tasker/services/notification_services.dart';
 
 final List<String> predefinedCategories = Category.getPredefinedCategories()
     .map((category) => category.name)
@@ -57,13 +58,15 @@ class _TaskListPageState extends State<TaskListPage> {
             bottom: 80.0,
             right: 20.0,
             child: FloatingActionButton(
-              onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AddTaskPage(),
-                  fullscreenDialog: true,
-                ),
-              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const AddTaskPage(),
+                    fullscreenDialog: true,
+                  ),
+                );
+              },
               child: const Icon(Icons.add, color: customSecundaryTextColor),
               backgroundColor: customPrimaryColor,
             ),
@@ -77,7 +80,7 @@ class _TaskListPageState extends State<TaskListPage> {
                 controller: _controller,
                 onSubmitted: (text) {
                   var uuid = const Uuid();
-                  final task = Task(uuid.v4(), text,
+                  final task = Task(generateId(), text,
                       category: selectedCategory == "Todos"
                           ? "Ninguna categoría"
                           : selectedCategory);
@@ -180,4 +183,8 @@ class _TaskListPageState extends State<TaskListPage> {
       ],
     );
   }
+}
+
+int generateId() {
+  return (DateTime.now().millisecondsSinceEpoch / 1000).round();
 }

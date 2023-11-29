@@ -14,7 +14,7 @@ class NewTaskModal extends StatelessWidget {
     if (_controller.text.isNotEmpty) {
       var taskModel = Provider.of<TaskModel>(context, listen: false);
       var newTask = Task(
-        DateTime.now().toString(), // Usamos el tiempo actual como ID único
+        generateId(), // Usamos el tiempo actual como ID único
         _controller.text,
         isDone: false, // La tarea nueva no está hecha
       );
@@ -64,8 +64,7 @@ class NewTaskModal extends StatelessWidget {
                   var taskModel =
                       Provider.of<TaskModel>(context, listen: false);
                   var newTask = Task(
-                    DateTime.now()
-                        .toString(), // Usamos el tiempo actual como ID único
+                    generateId(), // Usamos el tiempo actual como ID único
                     _controller.text,
                     isDone: false, // La tarea nueva no está hecha
                   );
@@ -81,4 +80,8 @@ class NewTaskModal extends StatelessWidget {
       ),
     );
   }
+}
+
+int generateId() {
+  return (DateTime.now().millisecondsSinceEpoch / 1000).round();
 }

@@ -3,6 +3,7 @@ class Task {
       {this.isDone = false,
       this.detail,
       this.dueDate,
+      this.reminderDate,
       this.flagSel,
       this.category});
 
@@ -13,14 +14,18 @@ class Task {
         detail = json['detail'],
         dueDate =
             json['dueDate'] != null ? DateTime.parse(json['dueDate']) : null,
+        reminderDate = json['reminderDate'] != null
+            ? DateTime.parse(json['reminderDate'])
+            : null,
         flagSel = json['flagSel'],
         category = json['category'];
 
-  late final String id;
+  late final int id;
   late final String title;
   late bool isDone;
   String? detail;
   DateTime? dueDate;
+  DateTime? reminderDate;
   int? flagSel;
   String? category;
 
@@ -30,6 +35,7 @@ class Task {
         'isDone': isDone,
         'detail': detail,
         'dueDate': dueDate?.toIso8601String(),
+        'reminderDate': reminderDate?.toIso8601String(),
         'flagSel': flagSel,
         'category': category,
       };
@@ -38,15 +44,17 @@ class Task {
     bool? isDone,
     String? detail,
     DateTime? dueDate,
+    DateTime? reminderDate,
     int? flagSel,
     String? category,
   }) {
     return Task(
-      this.id,
-      this.title,
+      id,
+      title,
       isDone: isDone ?? this.isDone,
       detail: detail ?? this.detail,
       dueDate: dueDate ?? this.dueDate,
+      reminderDate: reminderDate ?? this.reminderDate,
       flagSel: flagSel ?? this.flagSel,
       category: category ?? this.category,
     );

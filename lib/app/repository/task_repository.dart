@@ -1,9 +1,13 @@
 import 'dart:convert';
-
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:zen_tasker/app/model/task.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:zen_tasker/services/notification_services.dart';
 
 class TaskRepository {
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+  TaskRepository(this.flutterLocalNotificationsPlugin);
+
   Future<bool> addTask(Task task) async {
     final prefs = await SharedPreferences.getInstance();
     final jsonTasks = prefs.getStringList('tasks') ?? [];
@@ -14,6 +18,7 @@ class TaskRepository {
   Future<List<Task>> getTasks() async {
     final prefs = await SharedPreferences.getInstance();
     final jsonTasks = prefs.getStringList('tasks') ?? [];
+
     return jsonTasks
         .map((jsonTask) => Task.fromJson(jsonDecode(jsonTask)))
         .toList();
