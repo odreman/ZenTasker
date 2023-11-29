@@ -193,6 +193,8 @@ class _AddTaskPageState extends State<AddTaskPage> {
               const SizedBox(height: 50),
               ElevatedButton(
                 onPressed: () {
+                  var taskModel =
+                      Provider.of<TaskModel>(context, listen: false);
                   final task = Task(
                     generateId(),
                     _titleController.text,
@@ -201,6 +203,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                     dueDate: _dueDate,
                     reminderDate: _reminderDate,
                     isDone: false,
+                    position: taskModel.tasks.length, // Asigna la posición
                   );
                   Provider.of<TaskModel>(context, listen: false).addTask(task);
 

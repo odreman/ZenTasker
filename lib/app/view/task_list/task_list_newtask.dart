@@ -9,27 +9,30 @@ class TaskListNewTask extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: <Widget>[
-        Expanded(
-          child: TextField(
-            controller: controller,
-            decoration: const InputDecoration(
-              hintText: 'Nueva tarea',
+    return Padding(
+      padding: const EdgeInsets.only(left: 20, right: 10, bottom: 10),
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            child: TextField(
+              controller: controller,
+              decoration: const InputDecoration(
+                hintText: 'Nueva tarea',
+              ),
             ),
           ),
-        ),
-        IconButton(
-          icon: const Icon(Icons.send),
-          onPressed: () {
-            if (controller.text.isNotEmpty) {
-              onSubmitted(controller.text);
-              controller.clear();
-              FocusScope.of(context).unfocus();
-            }
-          },
-        ),
-      ],
+          IconButton(
+            icon: const Icon(Icons.send),
+            onPressed: () {
+              if (controller.text.isNotEmpty) {
+                onSubmitted(controller.text);
+                controller.clear();
+                FocusScope.of(context).unfocus();
+              }
+            },
+          ),
+        ],
+      ),
     );
   }
 }

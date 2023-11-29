@@ -1,7 +1,6 @@
 import 'package:chip_list/chip_list.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:uuid/uuid.dart';
 import 'package:zen_tasker/app/model/category.dart';
 import 'package:zen_tasker/app/model/task.dart';
 import 'package:zen_tasker/app/model/task_model.dart';
@@ -10,7 +9,6 @@ import 'package:zen_tasker/app/view/task_add_page/task_add_page.dart';
 import 'package:zen_tasker/app/view/task_list/task_list_newtask.dart';
 import 'package:zen_tasker/app/view/task_list/task_item.dart';
 import 'package:zen_tasker/utils/constants.dart';
-import 'package:zen_tasker/services/notification_services.dart';
 
 final List<String> predefinedCategories = Category.getPredefinedCategories()
     .map((category) => category.name)
@@ -79,7 +77,6 @@ class _TaskListPageState extends State<TaskListPage> {
               child: TaskListNewTask(
                 controller: _controller,
                 onSubmitted: (text) {
-                  var uuid = const Uuid();
                   final task = Task(generateId(), text,
                       category: selectedCategory == "Todos"
                           ? "Ninguna categoría"
@@ -143,7 +140,7 @@ class _TaskListPageState extends State<TaskListPage> {
       return selectedCategory == "Todos" || task.category == selectedCategory;
     }).toList();
 
-    return ListView(
+    return Column(
       children: [
         Padding(
           padding: const EdgeInsets.all(8.0),
@@ -171,15 +168,25 @@ class _TaskListPageState extends State<TaskListPage> {
           ),
         ),
         const SizedBox(height: 15),
-        ...filteredTasks.map((task) {
-          return TaskItem(
-            key: Key(task.id.toString()),
-            task,
-            onTap: () => taskModel.toggleDone(task),
-            onDelete: () => taskModel.deleteTask(task),
-            onTaskUpdated: taskModel.updateTask,
-          );
-        }).toList(),
+        Expanded(
+          child: ReorderableListView(
+            onReorder: (oldIndex, newIndex) {
+              taskModel.reorderTasks(oldIndex, newIndex);
+            },
+            children: filteredTasks.map((task) {
+              return ListTile(
+                key: Key(task.id.toString()),
+                title: TaskItem(
+                  key: Key(task.id.toString()),
+                  task,
+                  onTap: () => taskModel.toggleDone(task),
+                  onDelete: () => taskModel.deleteTask(task),
+                  onTaskUpdated: taskModel.updateTask,
+                ),
+              );
+            }).toList(),
+          ),
+        ),
       ],
     );
   }

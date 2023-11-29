@@ -9,16 +9,20 @@ Este es un proyecto de Flutter que implementa una aplicación de lista de tareas
 - Eliminar tareas
 - Reordenar tareas
 - Persistencia de datos entre sesiones
+- Notificaciones locales para recordar tareas
 
 ## Tecnologías utilizadas
 
 - Flutter
-- Provider para el manejo del estado
-- SharedPreferences para la persistencia de datos
-- introduction_screen para las pantallas de onboarding de primer uso
-- intl para la internacionalización
-- lottie para las animaciones
-- datetime_picker_formfield para seleccionar fechas y horas
+- Provider (^6.1.1) para el manejo del estado
+- SharedPreferences (^2.2.2) para la persistencia de datos
+- introduction_screen (^3.1.8) para las pantallas de onboarding de primer uso
+- intl (^0.18.1) para la internacionalización
+- lottie (^2.3.0) para las animaciones
+- datetime_picker_formfield (^2.0.1) para seleccionar fechas y horas
+- percent_indicator (^4.2.3) para mostrar porcentajes en forma de indicador
+- chip_list (^2.4.4+8) para manejar listas de chips
+- flutter_local_notifications (^16.2.0) para manejar notificaciones locales
 
 ## Cómo ejecutar el proyecto
 

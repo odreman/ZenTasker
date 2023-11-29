@@ -66,7 +66,8 @@ class NewTaskModal extends StatelessWidget {
                   var newTask = Task(
                     generateId(), // Usamos el tiempo actual como ID único
                     _controller.text,
-                    isDone: false, // La tarea nueva no está hecha
+                    isDone: false,
+                    position: taskModel.tasks.length, // Asigna la posición
                   );
                   taskModel.addTask(newTask);
                   Navigator.pop(context);

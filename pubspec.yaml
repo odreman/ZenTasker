@@ -40,7 +40,6 @@ dependencies:
   datetime_picker_formfield: ^2.0.1
   percent_indicator: ^4.2.3
   chip_list: ^2.4.4+8
-  uuid: ^4.0.0
   flutter_local_notifications: ^16.2.0
 
 

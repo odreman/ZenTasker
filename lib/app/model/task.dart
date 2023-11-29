@@ -5,7 +5,8 @@ class Task {
       this.dueDate,
       this.reminderDate,
       this.flagSel,
-      this.category});
+      this.category,
+      this.position});
 
   Task.fromJson(Map<String, dynamic> json)
       : id = json['id'],
@@ -18,7 +19,8 @@ class Task {
             ? DateTime.parse(json['reminderDate'])
             : null,
         flagSel = json['flagSel'],
-        category = json['category'];
+        category = json['category'],
+        position = json['position'];
 
   late final int id;
   late final String title;
@@ -28,6 +30,7 @@ class Task {
   DateTime? reminderDate;
   int? flagSel;
   String? category;
+  int? position;
 
   Map<String, dynamic> toJson() => {
         'id': id,
@@ -38,6 +41,7 @@ class Task {
         'reminderDate': reminderDate?.toIso8601String(),
         'flagSel': flagSel,
         'category': category,
+        'position': position,
       };
 
   Task copyWith({

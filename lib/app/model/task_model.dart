@@ -18,6 +18,12 @@ class TaskModel extends ChangeNotifier {
     }
     final Task task = tasks.removeAt(oldIndex);
     tasks.insert(newIndex, task);
+
+    // Actualiza la posición de cada tarea
+    for (int i = 0; i < tasks.length; i++) {
+      tasks[i].position = i;
+    }
+
     _saveTasks();
     notifyListeners();
   }

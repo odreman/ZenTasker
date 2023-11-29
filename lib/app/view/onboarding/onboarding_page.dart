@@ -34,7 +34,6 @@ class _OnboardingPageState extends State<OnboardingPage> {
                       title: "",
                       bodyWidget: const Column(
                         children: [
-                          SizedBox(height: 40),
                           TitleH1("Bienvenido a ZenTasker"),
                           SizedBox(height: 10),
                           Image(
@@ -50,7 +49,6 @@ class _OnboardingPageState extends State<OnboardingPage> {
                       title: "",
                       bodyWidget: const Column(
                         children: [
-                          SizedBox(height: 40),
                           TitleH1("Organiza con facilidad"),
                           SizedBox(height: 10),
                           Image(
@@ -66,7 +64,6 @@ class _OnboardingPageState extends State<OnboardingPage> {
                       title: "",
                       bodyWidget: const Column(
                         children: [
-                          SizedBox(height: 40),
                           TitleH1("Productividad serena"),
                           SizedBox(height: 10),
                           Image(
@@ -82,7 +79,6 @@ class _OnboardingPageState extends State<OnboardingPage> {
                       title: "",
                       bodyWidget: const Column(
                         children: [
-                          SizedBox(height: 40),
                           TitleH1("Gestión efectiva del tiempo"),
                           SizedBox(height: 10),
                           Image(
